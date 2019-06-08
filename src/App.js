@@ -62,6 +62,7 @@ function NextEvent({rolling}) {
 const SubTitile = styled.p`
   font-size: 35px;
   color: darkgoldenrod;
+  text-align: center;
 `;
 
 const HeaderImage = styled.div`
