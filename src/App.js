@@ -1,15 +1,15 @@
-import React, {useEffect, useRef, useState} from 'react'
+import React, {useRef, useState} from 'react'
 import ReactDice from 'react-dice-complete'
 import 'react-dice-complete/dist/react-dice-complete.css'
-import blue from "./blue.png"
-import yellow from "./yellow.png"
-import green from "./green.png"
-import pirate from "./pirate.png"
-import katan from "./catan.png"
+
+
+import katan from "./assets/catan.png"
 import styled from 'styled-components';
 
 import {AwesomeButton} from 'react-awesome-button';
 import 'react-awesome-button/dist/styles.css';
+import Event from "./componnents/Event";
+import {FlippingEvent} from "./componnents/FlippingEvent";
 
 
 const FlexColumn = styled.div`
@@ -27,36 +27,10 @@ align-items: center;
 `;
 
 
-function Event({logo, key}) {
-    return <img src={logo} key={key} style={{width: "120px", height: "120px", margin: "15px"}} alt=""/>;
-}
-
-
-const eventsRolling = [blue, green, pirate, yellow].sort(() => Math.random() - 0.5);
-
-function FlippingEvent() {
-    const [eventId, setEventId] = useState(0);
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setEventId((eventId + 1) % 4)
-        }, 400);
-        return () => clearInterval(interval)
-    }, [eventId]);
-
-
-    return <div>
-        {
-            <Event logo={eventsRolling[eventId]}/>
-        }
-    </div>
-}
-
 function NextEvent({rolling}) {
-    const events = [blue, green, pirate, yellow, pirate, pirate];
+    const events = ["blue", "green", "black", "yellow", "black", "black"];
 
-    return rolling ? <FlippingEvent/> : <Event logo={events[Math.round(Math.random() * 100 % 6 - 1)]}/>
-
+    return rolling ? <FlippingEvent/> : <Event color={events.sort(() => Math.random() - 0.5).pop()}/>
 }
 
 const SubTitile = styled.p`
@@ -80,14 +54,14 @@ export default function App() {
     const [rolling, setRolling] = useState(false);
 
 
-    function rollDoneCallback(num) {
+    function rollDoneCallback() {
         setRolling(false)
     }
 
     function rollIt() {
         setRolling(true);
-         diceE1.current.rollAll();
-         diceE2.current.rollAll();
+        diceE1.current.rollAll();
+        diceE2.current.rollAll();
     }
 
     return (
