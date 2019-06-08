@@ -6,7 +6,6 @@ import yellow from "./yellow.png"
 import green from "./green.png"
 import pirate from "./pirate.png"
 import katan from "./catan.png"
-import background from "./background.jpg"
 import styled from 'styled-components';
 
 import {AwesomeButton} from 'react-awesome-button';
@@ -28,25 +27,22 @@ align-items: center;
 `;
 
 
-
-
-
-
 function Event({logo, key}) {
     return <img src={logo} key={key} style={{width: "120px", height: "120px", margin: "15px"}} alt=""/>;
 }
 
 
 const eventsRolling = [blue, green, pirate, yellow].sort(() => Math.random() - 0.5);
+
 function FlippingEvent() {
     const [eventId, setEventId] = useState(0);
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setEventId((eventId+1) % 4)
+            setEventId((eventId + 1) % 4)
         }, 400);
         return () => clearInterval(interval)
-    },[eventId]);
+    }, [eventId]);
 
 
     return <div>
@@ -57,7 +53,7 @@ function FlippingEvent() {
 }
 
 function NextEvent({rolling}) {
-    const events = [blue, green, pirate, yellow,pirate,pirate];
+    const events = [blue, green, pirate, yellow, pirate, pirate];
 
     return rolling ? <FlippingEvent/> : <Event logo={events[Math.round(Math.random() * 100 % 6 - 1)]}/>
 
@@ -65,13 +61,21 @@ function NextEvent({rolling}) {
 
 const SubTitile = styled.p`
   font-size: 35px;
-  position: absolute;
   color: darkgoldenrod;
+`;
+
+const HeaderImage = styled.div`
+@media (max-width:629px) {
+    img {
+        display: none;
+    }
+}
 `;
 
 
 export default function App() {
-    const diceEl = useRef(null);
+    const diceE1 = useRef(null);
+    const diceE2 = useRef(null);
     const [rolling, setRolling] = useState(false);
 
 
@@ -81,27 +85,37 @@ export default function App() {
 
     function rollIt() {
         setRolling(true);
-        return diceEl.current.rollAll();
+         diceE1.current.rollAll();
+         diceE2.current.rollAll();
     }
 
     return (
         <FlexColumn>
-
-
-
             <FlexColumn>
-                <img src={katan} alt="kattan"/>
-                <SubTitile>OF CITIES AND KNIGHTS</SubTitile>
+                <HeaderImage>
+                    <img src={katan} alt="kattan"/>
+                </HeaderImage>
+                <SubTitile>CATAN OF CITIES AND KNIGHTS</SubTitile>
             </FlexColumn>
             <FlexColumn>
-                <ReactDice
-                    numDice={2}
-                    faceColor={"Wheat"}
-                    dotColor={"Black"}
-                    dieSize={120}
-                    rollDone={rollDoneCallback}
-                    ref={diceEl}
-                />
+                <FlexRow>
+                    <ReactDice
+                        numDice={1}
+                        faceColor={"Wheat"}
+                        dotColor={"Black"}
+                        dieSize={120}
+                        rollDone={rollDoneCallback}
+                        ref={diceE1}
+                    />
+                    <ReactDice
+                        numDice={1}
+                        faceColor={"red"}
+                        dotColor={"Black"}
+                        dieSize={120}
+                        rollDone={rollDoneCallback}
+                        ref={diceE2}
+                    />
+                </FlexRow>
             </FlexColumn>
             <FlexRow>
                 <NextEvent rolling={rolling}/>
